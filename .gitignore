@@ -1,0 +1,24 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# uv
+uv.lock
+.python-version
+
+# Secrets
+.env
+.env.*
+
+# One-off scripts
+scripts/
+
+# Results (design JSONs contain PDB strings)
+results/

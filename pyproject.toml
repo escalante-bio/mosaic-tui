@@ -1,0 +1,52 @@
+[project]
+name = "mosaic-tui"
+version = "0.1.0"
+description = "Terminal UI for mosaic protein binder design"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "scipy",
+    "mosaic",
+    "numpy",
+    "jax[cuda12]",
+    "polars",
+    "modal",
+    "gemmi>=0.6.5",
+    "rich>=13.0",
+    "textual>=8.0.1",
+    "textual-plotext>=1.0.1",
+    "ruff>=0.15.4",
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "orjson>=3.11.7",
+]
+
+[project.scripts]
+mosaic = "mosaic_tui.design_rich:main"
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "mosaic_tui.config_screen"
+# Dynamic widget attributes (field_desc, range_part) and object->scalar casts
+# in _collect_config are safe at runtime but not expressible in mypy.
+disable_error_code = ["attr-defined", "call-overload", "arg-type"]
+
+[tool.uv]
+override-dependencies = ["scipy==1.15.3", "numpy==2.1"]
+
+[tool.uv.sources]
+mosaic = { git = "https://github.com/escalante-bio/mosaic" }
+
+[dependency-groups]
+dev = [
+    "cairosvg>=2.8.2",
+]
