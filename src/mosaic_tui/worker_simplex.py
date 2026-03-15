@@ -9,18 +9,22 @@ import operator
 import time
 from functools import reduce
 
-import jax
-import jax.numpy as jnp
 import modal
 import numpy as np
-from mosaic.common import TOKENS
-from mosaic.losses.protein_mpnn import InverseFoldingSequenceRecovery
-from mosaic.losses.transformations import NoCys
-from mosaic.models.protenix import Protenix2025
-from mosaic.optimizers import simplex_APGM
-from mosaic.proteinmpnn.mpnn import load_mpnn_sol
-from mosaic.structure_prediction import TargetChain
-import mosaic.losses.structure_prediction as sp
+
+try:
+    import jax
+    import jax.numpy as jnp
+    from mosaic.common import TOKENS
+    from mosaic.losses.protein_mpnn import InverseFoldingSequenceRecovery
+    from mosaic.losses.transformations import NoCys
+    from mosaic.models.protenix import Protenix2025
+    from mosaic.optimizers import simplex_APGM
+    from mosaic.proteinmpnn.mpnn import load_mpnn_sol
+    from mosaic.structure_prediction import TargetChain
+    import mosaic.losses.structure_prediction as sp
+except ImportError:
+    pass
 
 from mosaic_tui.design_common import (
     GPU_VOLUMES,

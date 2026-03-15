@@ -9,18 +9,22 @@ import tempfile
 import time
 from pathlib import Path
 
-import equinox as eqx
-import jax
 import modal
 import numpy as np
-from mosaic.common import TOKENS
-from mosaic.models.boltzgen import (
-    CoordsToToken,
-    Sampler,
-    load_boltzgen,
-    load_features_and_structure_writer,
-)
-from mosaic.models.protenix import Protenix2025
+
+try:
+    import equinox as eqx
+    import jax
+    from mosaic.common import TOKENS
+    from mosaic.models.boltzgen import (
+        CoordsToToken,
+        Sampler,
+        load_boltzgen,
+        load_features_and_structure_writer,
+    )
+    from mosaic.models.protenix import Protenix2025
+except ImportError:
+    pass
 
 from mosaic_tui.design_common import (
     GPU_VOLUMES,

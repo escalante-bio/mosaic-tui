@@ -5,20 +5,28 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path, PurePath, PurePosixPath
 
-import equinox as eqx
 import gemmi
-import jax
-import jax.numpy as jnp
 import modal
 import numpy as np
-from biotite.structure import AtomArray
 
-from mosaic.common import TOKENS, LinearCombination
-from mosaic.losses.protenix import biotite_array_to_gemmi_struct
-from mosaic.models.protenix import Protenix
-from mosaic.structure_prediction import StructurePrediction, TargetChain
+try:
+    import equinox as eqx
+except ImportError:
+    from types import SimpleNamespace
 
-from mosaic_tui.ranking_loss import RankingLoss
+    eqx = SimpleNamespace(Module=object, field=lambda **kw: None, filter_jit=lambda f: f)  # type: ignore[assignment]
+
+try:
+    import jax
+    import jax.numpy as jnp
+    from biotite.structure import AtomArray
+    from mosaic.common import TOKENS, LinearCombination
+    from mosaic.losses.protenix import biotite_array_to_gemmi_struct
+    from mosaic.models.protenix import Protenix
+    from mosaic.structure_prediction import StructurePrediction, TargetChain
+    from mosaic_tui.ranking_loss import RankingLoss
+except ImportError:
+    pass
 
 # ---------------------------------------------------------------------------
 # Target data model (discriminated union)
@@ -249,7 +257,7 @@ image = (
     .add_local_file(str(_PROJECT_ROOT / "uv.lock"), "/app/uv.lock", copy=True)
     .workdir("/app")
     .run_commands(
-        "uv export --frozen --no-hashes --no-emit-project > /tmp/requirements.txt"
+        "uv export --frozen --no-hashes --no-emit-project --group gpu > /tmp/requirements.txt"
         " && uv pip install --system -r /tmp/requirements.txt"
     )
     .env({"XLA_PYTHON_CLIENT_MEM_FRACTION": "0.95"})
