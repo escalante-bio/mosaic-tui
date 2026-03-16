@@ -166,9 +166,9 @@ def main() -> None:
     )
     parser.add_argument("--run", default="", help="Run name (default: auto timestamp)")
     parser.add_argument(
-        "--fast-ranking",
+        "--full-ranking",
         action="store_true",
-        help="Reuse design features for ranking (avoids re-JIT, less accurate)",
+        help="Rebuild features per sequence for ranking (slower, more accurate)",
     )
     parser.add_argument(
         "--fast",
@@ -294,7 +294,7 @@ def main() -> None:
             ),
             method=method,
             ranking=RankingConfig(
-                fast_ranking=args.fast_ranking,
+                fast_ranking=not args.full_ranking,
                 use_msa=use_msa,
             ),
         )
@@ -322,7 +322,6 @@ def main() -> None:
                         ranking=dataclasses.replace(
                             config.ranking,
                             recycling_steps=1,
-                            fast_ranking=True,
                         ),
                     )
                 case BoltzGenConfig():
@@ -331,7 +330,6 @@ def main() -> None:
                         ranking=dataclasses.replace(
                             config.ranking,
                             recycling_steps=1,
-                            fast_ranking=True,
                         ),
                     )
 

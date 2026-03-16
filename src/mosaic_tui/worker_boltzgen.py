@@ -9,18 +9,8 @@ import tempfile
 import time
 from pathlib import Path
 
-import equinox as eqx
-import jax
 import modal
 import numpy as np
-from mosaic.common import TOKENS
-from mosaic.models.boltzgen import (
-    CoordsToToken,
-    Sampler,
-    load_boltzgen,
-    load_features_and_structure_writer,
-)
-from mosaic.models.protenix import Protenix2025
 
 from mosaic_tui.design_common import (
     GPU_VOLUMES,
@@ -40,7 +30,6 @@ from mosaic_tui.design_common import (
     configure_jax_cache,
     image,
     load_template_chain,
-    make_ranker,
 )
 
 
@@ -65,6 +54,19 @@ def run_boltzgen_designs(
     target_seq: str = "",
 ) -> list[dict]:
     """Run BoltzGen binder designs on a single GPU with queue-based progress."""
+    import equinox as eqx
+    import jax
+    from mosaic.common import TOKENS
+    from mosaic.models.boltzgen import (
+        CoordsToToken,
+        Sampler,
+        load_boltzgen,
+        load_features_and_structure_writer,
+    )
+    from mosaic.models.protenix import Protenix2025
+
+    from mosaic_tui.gpu_common import make_ranker
+
     configure_jax_cache()
 
     queue = modal.Queue.from_id(queue_id)

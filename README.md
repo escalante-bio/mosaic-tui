@@ -124,16 +124,16 @@ After completion, a summary table with statistics and top designs is printed to 
 
 Every design is ranked after optimization by folding the binder-target complex with Protenix and scoring iPTM + iPSAE. The binder is also folded as a monomer to check structural consistency.
 
-**Default ranking** rebuilds Protenix features from scratch for each sequence. This is more accurate because it incorporates the designed sequence (and sidechains!) into feature processing, but it's slow -- ranking can take longer than the design itself (especially when using BoltzGen).
+**Default (fast) ranking** reuses the features built during design. Skips the per-sequence feature rebuild and avoids a re-JIT. This is fast and good enough for most runs.
 
-**Fast ranking** (`--fast-ranking`) reuses the features built during design. Skips the per-sequence feature rebuild, and avoids a re-JIT. Use this for (most) runs where throughput matters more than precision.
+**Full ranking** (`--full-ranking`) rebuilds Protenix features from scratch for each sequence. This is more accurate because it incorporates the designed sequence (and sidechains!) into feature processing, but it's slow -- ranking can take longer than the design itself (especially when using BoltzGen).
 
 ```bash
-# Default: long JIT for each design, but structures include proper sidechains
-uv run mosaic --cif target.cif --chain A --num-designs 50
+# Default: fast ranking, no per-sequence re-JIT
+uv run mosaic --cif target.cif --chain A --num-designs 200
 
-# Fast: no JIT (after the first design)
-uv run mosaic --cif target.cif --chain A --num-designs 200 --fast-ranking
+# Full: rebuild features per sequence, proper sidechains
+uv run mosaic --cif target.cif --chain A --num-designs 50 --full-ranking
 ```
 
 When resuming a run with `--run`, the ranking config is locked to whatever was used in the original run. This ensures all designs in a run are ranked with the same method so scores are comparable. The config screen shows the ranking tab as locked.
@@ -205,7 +205,7 @@ The dashboard itself still runs (it's just a display), but no user input is requ
 | `--num-samples` | 4 | Diffusion samples per loss eval (simplex) |
 | `--no-msa` | false | Disable MSA for target chain |
 | `--fast` | false | Contact losses only, 1 recycle step |
-| `--fast-ranking` | false | Reuse design features for ranking |
+| `--full-ranking` | false | Rebuild features per sequence for ranking (slower, more accurate) |
 | `--rl-checkpoint` / `--no-rl-checkpoint` | on | RL post-trained BoltzGen weights |
 | `--no-trim` | false | Include unresolved terminal residues from entity sequence |
 | `--no-config` | false | Skip config screen |

@@ -6,9 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "scipy",
-    "mosaic",
     "numpy",
-    "jax[cuda12]",
     "polars",
     "modal",
     "gemmi>=0.6.5",
@@ -47,6 +45,10 @@ override-dependencies = ["scipy==1.15.3", "numpy==2.1"]
 mosaic = { git = "https://github.com/escalante-bio/mosaic" }
 
 [dependency-groups]
+gpu = [
+    "jax[cuda12]",
+    "mosaic",
+]
 dev = [
     "cairosvg>=2.8.2",
 ]

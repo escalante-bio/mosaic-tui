@@ -9,18 +9,8 @@ import operator
 import time
 from functools import reduce
 
-import jax
-import jax.numpy as jnp
 import modal
 import numpy as np
-from mosaic.common import TOKENS
-from mosaic.losses.protein_mpnn import InverseFoldingSequenceRecovery
-from mosaic.losses.transformations import NoCys
-from mosaic.models.protenix import Protenix2025
-from mosaic.optimizers import simplex_APGM
-from mosaic.proteinmpnn.mpnn import load_mpnn_sol
-from mosaic.structure_prediction import TargetChain
-import mosaic.losses.structure_prediction as sp
 
 from mosaic_tui.design_common import (
     GPU_VOLUMES,
@@ -40,7 +30,6 @@ from mosaic_tui.design_common import (
     configure_jax_cache,
     image,
     load_template_chain,
-    make_ranker,
     sample_hyperparams,
     validate_design_inputs,
 )
@@ -67,6 +56,19 @@ def run_designs(
     target_seq: str = "",
 ) -> list[dict]:
     """Run a chunk of binder designs on a single GPU with queue-based progress."""
+    import jax
+    import jax.numpy as jnp
+    import mosaic.losses.structure_prediction as sp
+    from mosaic.common import TOKENS
+    from mosaic.losses.protein_mpnn import InverseFoldingSequenceRecovery
+    from mosaic.losses.transformations import NoCys
+    from mosaic.models.protenix import Protenix2025
+    from mosaic.optimizers import simplex_APGM
+    from mosaic.proteinmpnn.mpnn import load_mpnn_sol
+    from mosaic.structure_prediction import TargetChain
+
+    from mosaic_tui.gpu_common import make_ranker
+
     configure_jax_cache()
 
     queue = modal.Queue.from_id(queue_id)
