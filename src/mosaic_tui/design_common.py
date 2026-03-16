@@ -236,7 +236,15 @@ image = (
         "/tmp/requirements.txt",
         copy=True,
     )
-    .run_commands("uv pip install --system -r /tmp/requirements.txt")
+    .add_local_file(
+        str(_PKG_DIR / "_overrides.txt"),
+        "/tmp/overrides.txt",
+        copy=True,
+    )
+    .run_commands(
+        "uv pip install --system -r /tmp/requirements.txt"
+        " --overrides /tmp/overrides.txt"
+    )
     .env({"XLA_PYTHON_CLIENT_MEM_FRACTION": "0.95"})
     .add_local_file(
         str(_PKG_DIR / "__init__.py"), "/app/mosaic_tui/__init__.py", copy=True

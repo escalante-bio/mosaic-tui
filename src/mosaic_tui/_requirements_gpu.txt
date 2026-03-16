@@ -421,7 +421,6 @@ numba==0.61.0
     #   ablang
     #   boltz
     #   boltzgen
-numpy==2.1.0
     # via
     #   ablang
     #   biopython
@@ -696,7 +695,6 @@ scikit-learn==1.6.1
     #   boltzgen
     #   esm
     #   protenix
-scipy==1.15.3
     # via
     #   biotraj
     #   boltz
