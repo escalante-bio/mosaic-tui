@@ -9,7 +9,7 @@ dependencies = [
     "numpy",
     "polars",
     "modal",
-    "gemmi>=0.6.5",
+    "gemmi>=0.6.5,<0.7",
     "rich>=13.0",
     "textual>=8.0.1",
     "textual-plotext>=1.0.1",

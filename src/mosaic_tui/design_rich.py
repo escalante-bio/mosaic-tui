@@ -228,8 +228,11 @@ def main() -> None:
         if saved_target["type"] == "sequence":
             target: Target = SeqTarget(sequence=saved_target["sequence"])
         else:
+            cif_path = Path("results") / args.run / saved_target["cif"]
+            if not cif_path.exists():
+                parser.error(f"file not found: {cif_path}")
             target = CifTarget(
-                path=str(Path("results") / args.run / saved_target["cif"]),
+                path=str(cif_path),
                 chain=saved_target["chain"],
             )
 
@@ -261,6 +264,8 @@ def main() -> None:
             parser.error("BoltzGen requires a structure file (--cif)")
 
         if args.cif:
+            if not Path(args.cif).exists():
+                parser.error(f"file not found: {args.cif}")
             target = CifTarget(path=args.cif, chain=args.chain)
         else:
             target = SeqTarget(sequence=args.sequence)
