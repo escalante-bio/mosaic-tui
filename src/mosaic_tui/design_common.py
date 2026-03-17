@@ -302,7 +302,7 @@ def download_weights() -> None:
     """Download all model weights into volumes (runs once, no GPU)."""
     from pathlib import Path
 
-    marker = Path("/root/.protenix/.complete")
+    marker = Path("/root/.protenix/.complete_v2")
     if marker.exists():
         return
 
